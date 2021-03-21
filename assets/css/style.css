@@ -1,0 +1,48 @@
+.city-search-header{
+    padding:10px
+}
+
+.btn{
+    margin-bottom:10px;
+}
+
+.list-group{
+    margin:10px;
+}
+
+.current-city{
+    text-align:center;
+}
+
+.current-city h2{
+    font-weight:bold;
+}
+
+.current-temp{
+    font-weight:bold;
+    font-size: 20px;
+}
+
+.forecast-temp{
+    font-weight:bold;
+    font-size: 15px;
+}
+
+.good-uv{
+    color:green;
+}
+
+.moderate-uv{
+    color: darkorange;
+}
+
+.high-uv{
+    color: red;
+}
+
+li:hover{
+    cursor:pointer;
+    outline:none;
+    border-color: #9ecaed;
+    box-shadow: 0 0 10px #9ecaed;  
+}
