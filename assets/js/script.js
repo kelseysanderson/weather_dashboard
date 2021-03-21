@@ -8,43 +8,12 @@ var savedCities = {city:""}
 
 var today = moment().format("LL")
 
-var forecastDays = {
-  "0":{
-    date:"",
-    icon:"",
-    temp:"",
-    humidity:""
-  },
-  "1":{
-    date:"",
-    icon:"",
-    temp:"",
-    humidity:""
-  },
-  "2":{
-    date:"",
-    icon:"",
-    temp:"",
-    humidity:""
-  },
-  "3":{
-    date:"",
-    icon:"",
-    temp:"",
-    humidity:""
-  },
-  "4":{
-    date:"",
-    icon:"",
-    temp:"",
-    humidity:""
+var forecastDays = ["0","1","2","3","4"]
 
-  }
-}
 
-searchBtn.on('click', function(event){
+//get city name after search is submitted
+function initial(event){
   event.preventDefault();
-   //get city name after search button is typed
     //get value of text input into search form
     citySearched = $('input[name="city-input"]').val();
 
@@ -60,7 +29,7 @@ searchBtn.on('click', function(event){
     //empty search form box
     $('input[name="city-input"]').val('');
     
-});
+}
 
 //get geolocation coordinates of city from api
 function geolocationCoordinates(coordinatesRequestUrl, citySearched){
@@ -121,26 +90,31 @@ function displayCurrentWeather(data, citySearched){
 
 //display future forecast
 function displayForecast(data){
+    var layout = $('.layout')
+    layout.html('')
     //loop to populate forecast cards
     for (let i = 1; i < 6; i++) {
-      var layout = $('.layout')
-  
+      
+      
       var forecastCard = $('<div class="card col-6 col-md-4 col-lg-2">')
         layout.append(forecastCard);
     
       var cardBody = $('<div class="card-body">')
         forecastCard.append(cardBody);
-          
-      var cardTitle = $('<h5 class= "card-title">');
-        cardBody.append(cardTitle);
+      
+      //translate unix from api and display date on card
+      var dateTitle = $('<h5 class= "date-title">');
+        cardBody.append(dateTitle);
         unixCode= data.daily[i].dt
         var date= (moment.unix(unixCode.toString()).format('LL'))
-        cardTitle.text(date)
+        dateTitle.text(date)
 
+      //add weather icon by date
       var weatherIcon = $('<img class="weather-icon">')
         weatherIcon.attr('src', 'http://openweathermap.org/img/w/' + data.daily[i].weather[0].icon + '.png')
-        cardTitle.append(weatherIcon);
+        dateTitle.append(weatherIcon);
 
+      //uvi index
       var weatherDescription = $('<p>');
         cardBody.append(weatherDescription);  
         var output= '<span class ="forecast-temp">' + data.daily[i].temp.max.toFixed(0) + '&#8457' + ' / ' + data.daily[i].temp.min.toFixed(0) + '&#8457' + "</span>";
@@ -155,4 +129,12 @@ function displayForecast(data){
           }
       weatherDescription.html(output);
   }     
+
 }
+
+searchBtn.on('click', initial);
+
+//local storage
+
+
+//bug:typing in 2 cities, replace date with city name?
