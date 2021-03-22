@@ -13,9 +13,11 @@ var cityNames=[]
 
 function init(){
   var savedCities = JSON.parse(localStorage.getItem('cities'))
-  cityNames = savedCities
+  if( savedCities != null){
+    cityNames = savedCities
+  }
   for (let i = 0; i < cityNames.length; i++) {
-  cityList.append('<li class="list-group-item">' + cityNames[i] + '</li>' )
+    cityList.append('<li class="list-group-item">' + cityNames[i] + '</li>' )
   }
 }
 
@@ -47,7 +49,6 @@ function storeCities(){
   var strCityNames = JSON.stringify(cityNames);
   localStorage.setItem('cities', strCityNames);
 }
-
 
 //get geolocation coordinates of city from api
 function geolocationCoordinates(coordinatesRequestUrl, citySearched){
@@ -152,7 +153,6 @@ function displayForecast(data){
 searchBtn.on('click', cityInput);
 
 $(document).on('click', '.list-group-item', function(){
-
   var coordinatesRequestUrl = 'https://api.openweathermap.org/geo/1.0/direct?q='+$(this).text()+'&units=imperial&id=524901&appid=ab7266a3a00f62e9f68c69fe3c45b0e5'
   geolocationCoordinates(coordinatesRequestUrl, $(this).text());
 
