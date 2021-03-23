@@ -16,37 +16,42 @@
             <p class="lead"> Display current weather data for your city with the click of a button.</p>
         </div>
     </header>
-    <main>
-    <section class="container" id= "current-weather">
-        <div class="row justify-content-center">
-            <div class="card col-12 col-sm-6 col-md-5 col-lg-4 align-items-center" >
-            <h2 class = "city-search-header">Search Your City:</h2>
-            <form>
-            <div class="form-group">
-                <input type="text" name= "city-input" class="form-control" id="name-input" placeholder="enter city" />
-            </div>
-            <button class="btn btn-info">Search</button>
-                <ul class="list-group list-group" style = "width: 16rem">
-                </ul>
-            </div>   
-            </form>
-            
-        <div class= "current-city col-12 col-sm-5 col-md-6 col-lg-7">
-                <h3 class="card-title">
-                    <img class="weather-icon"></img>
-                </h3>
-                <h6 class="card-subtitle mb-2 text-muted"></h6>
-                <p class="card-text"></p>
-                <a href="#" class="card-link"></a>
-                <a href="#" class="card-link"></a>
+    <main class = "container-fluid">
+        <section class="row justify-content-around">
+            <div class="card col-12 col-sm-3.5 col-md-4 col-lg-3 col-xl-3 mb-5 ml-1 align-items-center" id= "current-weather" >
+                <h2 class = "city-search-header">Search Your City:</h2>
+                <form>
+                <div class="form-group">
+                    <input type="text" name= "city-input" class="form-control" id="name-input" placeholder="enter city" />
                 </div>
-                  
-                <h2 class= "city-name"></h2>
-        </div>
+                <button class="btn btn-info">Search</button>
+                <ul class="list-group list-group" style = "width: 16rem"></ul>  
+                </form>        
+            </div>    
+            <div class = "col-12 col-sm-7 col-md-7 col-lg-8 col-xl-8">
+                <div class = "row justify-content-center">
+                <div class= "current-city">
+                    <h3 class="card-title">
+                        <img class="weather-icon"></img>
+                    </h3>
+                    <h6 class="card-subtitle mb-2 text-muted"></h6>
+                    <p class="card-text"></p>
+                    <a href="#" class="card-link"></a>
+                    <a href="#" class="card-link"></a>
+                </div>
+                </div>
+                <div class = "row justify-content-center">
+                    <div class = "col-12 mb-5 ml-2">
+                        <div class = "layout row justify-content-center"> </div>
+                    </div>
+                </div>
+            </div>
+            
+           
+                
+            
 
-        <div class="container" id="forecast-section">
-            <div class = "layout row justify-content-center mt-5"> </div>
-        </div>
+        
 
     </section> 
        

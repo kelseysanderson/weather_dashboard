@@ -1,23 +1,20 @@
-
 var searchBtn = $('.btn');
 var searchForm = $('.form-control');
-var cityList = $('.list-group')
-var citySearched = ''
-
-
-var today = moment().format("LL")
-
-var forecastDays = ["0","1","2","3","4"]
-
-var cityNames=[]
+var cityList = $('.list-group');
+var citySearched = '';
+var cityEntered=false;
+var today = moment().format("LL");
+var forecastDays = ["0","1","2","3","4"];
+var cityNames=[];
+var listId = 0
 
 function init(){
-  var savedCities = JSON.parse(localStorage.getItem('cities'))
+  var savedCities = JSON.parse(localStorage.getItem('cities'));
   if( savedCities != null){
-    cityNames = savedCities
+    cityNames = savedCities;
   }
   for (let i = 0; i < cityNames.length; i++) {
-    cityList.append('<li class="list-group-item">' + cityNames[i] + '</li>' )
+    cityList.append('<li class="list-group-item">' + cityNames[i] + '</li>' );
   }
 }
 
@@ -25,24 +22,28 @@ function init(){
 function cityInput(event){
   event.preventDefault();
     //get value of text input into search form
-    citySearched = $('input[name="city-input"]').val()
-    citySearched = citySearched.charAt(0).toUpperCase() + citySearched.slice(1)
+    citySearched = $('input[name="city-input"]').val();
+    citySearched = citySearched.charAt(0).toUpperCase() + citySearched.slice(1);
 
     cityNames.push(citySearched);
 
     if(!citySearched) {
-        alert('you must type a city')
-        return
+        alert('you must type a city');
+        return;
     }
     //append list item with submitted city
-    cityList.append('<li class="list-group-item">' + citySearched + '</li>' )
-    var coordinatesRequestUrl = 'https://api.openweathermap.org/geo/1.0/direct?q='+citySearched+'&units=imperial&id=524901&appid=ab7266a3a00f62e9f68c69fe3c45b0e5'
+    citySearchedList = $('<li>');
+      citySearchedList.attr('class', 'list-group-item');
+      citySearchedList.text(citySearched);
+
+    cityList.append(citySearchedList);
+    
+    var coordinatesRequestUrl = 'https://api.openweathermap.org/geo/1.0/direct?q='+citySearched+'&units=imperial&id=524901&appid=ab7266a3a00f62e9f68c69fe3c45b0e5';
 
     storeCities();
     geolocationCoordinates(coordinatesRequestUrl, citySearched);
     //empty search form box
     $('input[name="city-input"]').val('');
-  
 }
 
 function storeCities(){
@@ -82,7 +83,7 @@ function displayCurrentWeather(data, citySearched){
     //display city name using citySearched variable
     var cityName = $('.card-title');
       //add icon to end of city name 
-        cityName.html(citySearched + '<img src = http://openweathermap.org/img/w/' + data.current.weather[0].icon + '.png></img>' );
+        cityName.html(citySearched + '<img src = https://openweathermap.org/img/w/' + data.current.weather[0].icon + '.png></img>' );
       //translate unixcode given from api display as date
         unixCode= data.current.dt
         var date= (moment.unix(unixCode.toString()).format('LL'));
@@ -96,11 +97,11 @@ function displayCurrentWeather(data, citySearched){
         output += '<br> Wind Speed: ' + data.current.wind_speed.toFixed(0) + 'mph.'
         //change uvi text color based on good, moderate, and severe uvi index
         if (data.current.uvi <= 2){
-          output += '<br> <span class= "good-uv">UV index:' + data.current.uvi + '</span>'
+          output += '<br> <span class= "good-uv">UV index: ' + data.current.uvi.toFixed(0) + '</span>'
         } else if (data.current.uvi  <= 7){
-          output += '<br> <span class= "moderate-uv">UV index:' + data.current.uvi + '</span>'
+          output += '<br> <span class= "moderate-uv">UV index: ' + data.current.uvi.toFixed(0) + '</span>'
         } else {
-          output += '<br> <span class= "high-uv">UV index:' + data.current.uvi + '</span>'
+          output += '<br> <span class= "high-uv">UV index: ' + data.current.uvi.toFixed(0) + '</span>'
         }
         //display data in description.
         description.html(output);
@@ -111,25 +112,29 @@ function displayForecast(data){
     var layout = $('.layout');
     layout.html('');
     //loop to populate forecast cards
-    for (let i = 1; i < 6; i++) {
+    for (let i = 1; i < 6; i++) {   
       
-      
-      var forecastCard = $('<div class="card col-6 col-md-4 col-lg-2">');
+      var forecastCard = $('<div>');
         layout.append(forecastCard);
-    
-      var cardBody = $('<div class="card-body">');
+        forecastCard.attr('class', 'card')
+        forecastCard.attr('style', 'margin:2px;')
+
+      var cardBody = $('<div>');
         forecastCard.append(cardBody);
+        cardBody.attr('style', 'padding:10px; text-align:center;')
       
       //translate unix from api and display date on card
-      var dateTitle = $('<h5 class= "date-title">');
+      var dateTitle = $('<h5>');
+        dateTitle.attr('class','date-title');
         cardBody.append(dateTitle);
         unixCode= data.daily[i].dt;
-        var date= (moment.unix(unixCode.toString()).format('LL'))
+        var date= (moment.unix(unixCode.toString()).format('LL'));
         dateTitle.text(date);
 
       //add weather icon by date
-      var weatherIcon = $('<img class="weather-icon">');
-        weatherIcon.attr('src', 'http://openweathermap.org/img/w/' + data.daily[i].weather[0].icon + '.png');
+      var weatherIcon = $('<img>');
+        weatherIcon.attr('class','weather-icon');
+        weatherIcon.attr('src', 'https://openweathermap.org/img/w/' + data.daily[i].weather[0].icon + '.png');
         dateTitle.append(weatherIcon);
 
       //uvi index
@@ -139,15 +144,14 @@ function displayForecast(data){
           output += '<br>Humidity: ' + data.daily[i].humidity + '%.';
           output += '<br> Wind Speed: ' + data.daily[i].wind_speed.toFixed(0) + 'mph.';
           if (data.daily[i].uvi <= 2){
-            output += '<br> <span class= "good-uv">UV index:' + data.daily[i].uvi + '</span>';
+            output += '<br> <span class= "good-uv">UV index: ' + data.daily[i].uvi.toFixed(0) + '</span>';
           } else if (data.daily[i].uvi  <= 7){
-              output += '<br> <span class= "moderate-uv">UV index:' + data.daily[i].uvi + '</span>';
+              output += '<br> <span class= "moderate-uv">UV index: ' + data.daily[i].uvi.toFixed(0) + '</span>';
           } else {
-              output += '<br> <span class= "high-uv">UV index:' + data.daily[i].uvi + '</span>';
+              output += '<br> <span class= "high-uv">UV index: ' + data.daily[i].uvi.toFixed(0) + '</span>';
           }
       weatherDescription.html(output);
   }     
-
 }
 
 searchBtn.on('click', cityInput);
@@ -155,7 +159,9 @@ searchBtn.on('click', cityInput);
 $(document).on('click', '.list-group-item', function(){
   var coordinatesRequestUrl = 'https://api.openweathermap.org/geo/1.0/direct?q='+$(this).text()+'&units=imperial&id=524901&appid=ab7266a3a00f62e9f68c69fe3c45b0e5'
   geolocationCoordinates(coordinatesRequestUrl, $(this).text());
-
 });
 
 init();
+
+//clear button?
+//arrange forecast under current weather?
